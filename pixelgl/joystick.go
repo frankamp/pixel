@@ -94,25 +94,11 @@ func (w *Window) JoystickAxis(js Joystick, axis int) float64 {
 func (w *Window) updateJoystickInput() {
 	for js := Joystick1; js <= JoystickLast; js++ {
 		// Determine and store if the joystick was connected
-		joystickPresent := glfw.JoystickPresent(glfw.Joystick(js))
+		joystickPresent := false // killing joystick suppor the wrong way
 		w.tempJoy.connected[js] = joystickPresent
-
-		if joystickPresent {
-			w.tempJoy.buttons[js] = glfw.GetJoystickButtons(glfw.Joystick(js))
-			w.tempJoy.axis[js] = glfw.GetJoystickAxes(glfw.Joystick(js))
-
-			if !w.currJoy.connected[js] {
-				// The joystick was recently connected, we get the name
-				w.tempJoy.name[js] = glfw.GetJoystickName(glfw.Joystick(js))
-			} else {
-				// Use the name from the previous one
-				w.tempJoy.name[js] = w.currJoy.name[js]
-			}
-		} else {
-			w.tempJoy.buttons[js] = []byte{}
-			w.tempJoy.axis[js] = []float32{}
-			w.tempJoy.name[js] = ""
-		}
+		w.tempJoy.buttons[js] = []byte{}
+		w.tempJoy.axis[js] = []float32{}
+		w.tempJoy.name[js] = ""
 	}
 
 	w.prevJoy = w.currJoy
